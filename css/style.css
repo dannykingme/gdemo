@@ -118,8 +118,8 @@ a[role="button"] {
   -webkit-transform: translateY(120px);
       -ms-transform: translateY(120px);
           transform: translateY(120px);
-  -webkit-transition-delay: 250ms;
-          transition-delay: 250ms;
+  -webkit-transition-delay: 25ms;
+          transition-delay: 25ms;
 }
 .app.opened.show-tools .app-foot .make {
   -webkit-transform: translateY(-120px);
