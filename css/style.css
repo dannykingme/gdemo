@@ -323,3 +323,6 @@ a[role="button"] {
           transition: transform 250ms 0ms;
   pointer-events: none;
 }
+.photo-title:before {
+  content: attr(data-title);
+}

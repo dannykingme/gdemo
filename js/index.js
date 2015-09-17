@@ -23,7 +23,7 @@
     var current = $(this).attr('data-title');
     $('.app').addClass('opened');
     $('.photo').attr('src', url);
-    $('.photo-title').html(current);
+    $('.photo-title').attr('data-title', current);
     e.preventDefault();
   });
 
