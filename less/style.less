@@ -1,31 +1,31 @@
-@height_header: 120px;
-@now: 0.0ms;
-@run: 250ms;
-@run_faster: @run / 10.0;
-@run_fast:   @run / 2.50;
-@run_slow:   @run * 1.50;
-@run_slower: @run * 2.00;
+// Variables
 
+@height_header: 120px;    // Using the header as a base keeps things consistent.
 
+@now: 0.0ms;              // This is a system I borrowed from some previous
+@run: 250ms;              // projects of mine. They're basically just run times
+@run_faster: @run / 10.0; // based on a single master run time. Using these for
+@run_fast:   @run / 2.50; // transition durations and delays helps me keep
+@run_slow:   @run * 1.50; // animations consistent and lets me easily slow things
+@run_slower: @run * 2.00; // down for making detailed changes.
 
-.cascade(@c) when (@c > 0) {
-  .cascade((@c - 1));
-  &:nth-child(@{c}) {
-    transition-delay: @run_faster * @c;
-  }
-}
+// Functions
 
+.cascade(@c) when (@c > 0) {            //
+  .cascade((@c - 1));                   // Simple for loops that lets me add
+  &:nth-child(@{c}) {                   // stacking transition delays to
+    transition-delay: @run_faster * @c; // designated sibling elements. This
+  }                                     // creates a delightful cascade effect
+}                                       // for animations.
 
+// Misc.
 
-* {
-  &,
-  &::before,
-  &::after {
-    box-sizing: border-box;
-  }
-}
+* { &, &::before, &::after {box-sizing: border-box;}}
+
+// DOM Elements
+
 html {
-  font-family: Helvetica Neue, Helvetic, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetic, Arial, sans-serif;
   font-size: 16px;
   color: #4a4a4a;
   -webkit-font-smoothing: antialiased;
@@ -33,28 +33,28 @@ html {
 }
 body {
   width: 100%;
-  //overflow: hidden;
-}
-a {
-  &[role="button"] {
-    cursor: pointer;
-  }
 }
 
+// Global by attribute
 
-
+[role="button"] {  // This is useful for using anchors without hrefs, since I
+  cursor: pointer; // don't actually want to go anywhere when I click things.
+}
 [class|="icon"] {
   width: 1.5rem;
   height: 1.5rem;
   fill: #ebebeb;
   transition: fill @run;
 }
-.background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+
+// Common Elements
+
+.background {         //
+  position: absolute; // Using child elements as background fills rather than
+  top: 0;             // adding a background to a wrapper, is a trick I learned
+  left: 0;            // from working on Precursor. It let's me animate state
+  width: 100%;        // changes with more control and prevents me from having
+  height: 100%;       // to do transform within transforms.
 }
 .toolbar {
   display: flex;
@@ -76,22 +76,23 @@ a {
     background: #333;
   }
 }
-.make {
-  transition: @run;
-  .cascade(10);
+.make {             //
+  transition: @run; // This is the 2nd part of the cascade function above.
+  .cascade(10);     //
 }
 .heading {
   font-size: 2.5rem;
   font-weight: 500;
 }
 
+// Components
 
 .app {
-  &.opened {
-    &.show-tools {
+  &.opened { // When photo detail is open.
+    &.show-tools { // Gets toggled w/ jQuery when the photo details is tapped.
       .photo-title {
         transform: translateY(@height_header);
-        transition-delay: @run;
+        transition-delay: @run_faster;
       }
       .app-foot {
         .make {
@@ -125,7 +126,7 @@ a {
 
     }
   }
-  &:not(.opened) {
+  &:not(.opened) {  // when photo detail is closed (using :not saves me from having to override base styles)
     .app-head-title {
       transition-delay: @run_slow;
     }
@@ -255,6 +256,6 @@ a {
   transition: transform @run @now;
   pointer-events: none;
   &:before {
-    content: attr(data-title);
+    content: attr(data-title); // Passing this through attr should prevent and obivous XSS vulnerability.
   }
 }
